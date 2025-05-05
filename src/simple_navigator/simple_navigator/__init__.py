@@ -3,12 +3,15 @@ from rclpy.node import Node
 from nav2_msgs.action import NavigateToPose
 from rclpy.action import ActionClient
 from geometry_msgs.msg import PoseStamped
+from rcl_interfaces.srv import SetParameters
 import time
 
 class SimpleNavigator(Node):
     def __init__(self):
         super().__init__('simple_navigator')
         self.client = ActionClient(self, NavigateToPose, 'navigate_to_pose')
+        self.param_client = self.create_client(
+            SetParameters, '/controller_server/set_parameters')
         self.goals = [
             self.create_pose(1.0, 0.0, 0.0),
             self.create_pose(1.0, 1.0, 1.57),
